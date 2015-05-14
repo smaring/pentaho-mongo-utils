@@ -3,6 +3,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <name>Pentaho Platform Mongo Utils</name>
+  <groupId>pentaho</groupId>
+  <artifactId>pentaho-mongo-utils</artifactId>
+  <version>6.0-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-ce-jar-parent-pom</artifactId>
@@ -11,34 +17,64 @@
     <relativePath />
   </parent>
 
-  <name>Pentaho Platform Mongo Utils</name>
-  <groupId>pentaho</groupId>
-  <artifactId>pentaho-mongo-utils</artifactId>
-  <version>6.0-SNAPSHOT</version>
-  <packaging>bundle</packaging>
-
   <properties>
-    <dependency.mongo-driver.revision>2.11.1</dependency.mongo-driver.revision>
+    <dependency.biz.aQute.bind.version>2.3.0</dependency.biz.aQute.bind.version>
+    <dependency.junit.junit.version>4.4</dependency.junit.junit.version>
+    <dependency.org.mongodb.mongo-java-driver.version>2.11.1</dependency.org.mongodb.mongo-java-driver.version>
+    <dependency.org.mockito.mockito-all.version>1.8.5</dependency.org.mockito.mockito-all.version>
+    
+    <plugin.org.apache.felix.maven-bundle-plugin.version>2.3.7</plugin.org.apache.felix.maven-bundle-plugin.version>
   </properties>
 
   <scm>
     <developerConnection>scm:git:git@github.com:pentaho/pentaho-mongo-utils.git</developerConnection>
-    <url>https://github.com/pentaho/pentaho-mongo-utils.git</url>
-    <tag>HEAD</tag>
+    <url>https://github.com/pentaho/pentaho-mongo-utils</url>
   </scm>
 
+
+
+  <build>
+  
+    <plugins>
+    
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${plugin.org.apache.felix.maven-bundle-plugin.version}</version>
+        <extensions>true</extensions>
+          <configuration>
+            <instructions>
+              <Bundle-Description>Fragment bundle used to import required security packages into mongo-java-driver.</Bundle-Description>
+              <Bundle-License>http://www.apache.org/licenses/LICENSE-2.0.txt</Bundle-License>
+              <Bundle-Name>MongoDB Java Driver Fragment</Bundle-Name>
+              <Bundle-SymbolicName>org.mongodb.mongo-security-ext</Bundle-SymbolicName>
+              <Bundle-Version>${dependency.org.mongodb.mongo-java-driver.version}-RELEASE</Bundle-Version>
+              <Fragment-Host>org.mongodb.mongo-java-driver</Fragment-Host>
+              <Import-Package>*</Import-Package>            
+            </instructions>
+          </configuration>
+      </plugin>
+      
+    </plugins>
+    
+  </build>
+
+
+
   <dependencies>
+  
     <!-- ######################### COMPILE ######################### -->
     <dependency>
       <groupId>biz.aQute</groupId>
       <artifactId>bnd</artifactId>
-      <version>2.3.0</version>
+      <version>${dependency.biz.aQute.bind.version}</version>
       <scope>compile</scope>
     </dependency>
+    
     <dependency>
       <groupId>org.mongodb</groupId>
       <artifactId>mongo-java-driver</artifactId>
-      <version>${dependency.mongo-driver.revision}</version>
+      <version>${dependency.org.mongodb.mongo-java-driver.version}</version>
       <scope>compile</scope> <!-- It was default->default -->
       <exclusions> <!-- Transitive=false -->
         <exclusion>
@@ -47,39 +83,26 @@
         </exclusion>
       </exclusions>
     </dependency>
+    
     <!-- ######################### RUNTIME ######################### -->
+    
     <!-- ######################### PROVIDED ######################## -->
+    
     <!-- ########################## TEST ########################### -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.4</version>
+      <version>${dependency.junit.junit.version}</version>
       <scope>test</scope>
     </dependency>
+    
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
-      <version>1.8.5</version>
+      <version>${dependency.org.mockito.mockito-all.version}</version>
       <scope>test</scope>
     </dependency>
+    
   </dependencies>
-  
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
-        <extensions>true</extensions>
-          <configuration>
-            <instructions>
-              <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-              <Bundle-Version>${project.version}</Bundle-Version> 
-              <Export-Package>pentaho-mongo-utils</Export-Package>             
-            </instructions>
-          </configuration>
-      </plugin>
-    </plugins>
-  </build>
   
 </project>
